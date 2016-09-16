@@ -1,0 +1,5 @@
+$ ./copy.sh archivo
+$ mv archivo mcarlini
+$ gcc -marm archivo.s archivo.c
+$ ./a.out
+Ctrl+C , :wq

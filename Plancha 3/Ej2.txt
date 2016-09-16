@@ -1,0 +1,43 @@
+Para simplificar las cuentas usamos logaritmos:
+
+2^(x) = 10^(23) => log2(2^(x)) = log2(10^(23)) => x ~= 76.4043462
+
+Ahora, 2^(76.4043462) = 2^(0.4043462) * 2^(76) ~= 1.323489 * 2^(76)
+ 
+Por lo tanto, N ~= 6.02252 * 1.323489 * 2^(76) ~= 7.97 * 2^(76)
+ 
+Ahora, debemos convertir N a la norma IEEE754
+
+Parte entera:
+	-> 7 =	111 en base 2
+
+Parte decimal:
+	-> 0.97 * 2 =	1 .94
+	-> 0.94 * 2 =	1 .88
+	-> 0.88 * 2 = 	1 .76
+	-> 0.76 * 2 =	1 .52
+	-> 0.52 * 2 =	1 .04
+	-> 0.04 * 2 = 	0 .08
+	-> 0.08 * 2 = 	0 .16
+	-> 0.16 * 2 =	0 .32
+	-> 0.32 * 2 =	0 .64
+	-> 0.64 * 2 =	1 .28
+
+Luego, la parte fraccionaria sera 1111100001
+
+Concluimos que, 0.97073895 en base 10 -> 111.1111100001 en base 2 
+
+Normalizemos 111.1111100001  
+
+Exponente: 127 + 2 = 129
+Mantisa: 11111110000100000000000
+Signo: 0
+
+Como N ~= 7.97 * 2^(76), y ya tenemos normalizado 7.97, solo tenemos que sumar 76 al exponente 
+
+Exponente: 129 + 76 = 205 = 11001101 
+Mantisa: 11111110000100000000000 
+Signo: 0
+
+	-> 0 | 11001101 | 11111110000000000000000
+

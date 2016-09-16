@@ -1,0 +1,8 @@
+If the constant can be constructed with a MOV or MVN instruction, the assembler generates the appropriate instruction.
+If the constant cannot be constructed with a MOV or MVN instruction, the assembler:
+	->	places the value in a literal pool (a portion of memory embedded in the code to hold constant values)
+   ->	generates an LDR instruction with a program-relative address that reads the constant from the literal pool.
+
+Si la constante puede ser construida con una instruccion MOV o MVN, se usará tal instrucción. En caso contrario, se colocará el valor en memoria y se generará una instruccion LRD para poder leer dicha constante de memoria mediante el uso del PC y un offset.
+
+http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0040d/Bgbbfgia.html
