@@ -1,0 +1,78 @@
+Para implementar una forma mas genera de funciones (con funciones recursivas) y variables automaticas se usa la pila. La pila en x86_64 crece hacia las dir de memoria mas bajas
+
+Se mantiene un puntero al tope de la pila el cual puede ser el proximo lugar vacio o el ultimo elemento que se ingreso (facilita el push & pop)
+x86_64 utiliza un puntero al ultimo lugar utilizado (%rsp)
+
+El pop involucra la actulizacion del puntero, asi, el pop completo sera:
+	movq (%rsp), destino
+	addq $8, %rsp
+	
+Push entonces sera:
+	add $8, %rsp
+	movq origen, (%rsp)
+	
+Assambler provee las instrucciones push y pop que son equivalentes a las antes vistas
+En x86_64, todos los accesos al stack deben estar alineados en 8 bytes
+
+Un push de un long (tambien de un unsigned long y de un puntero) de C sera entonces:
+			pushq	long #usa rsp
+			pushq %rax
+¿Como guardar un char? Convertirlo a 64 bits utilizando las instrucciones para convertir a tipos enteros mas grandes
+
+
+Instrucciones de conversion (enteras)
+	- movslq orig, dest 	# convierte un .long en orig a un .quad
+							 	# extendiendo el signo
+	- movsbq
+	- movswq # ¿Existe?
+
+Las instrucciones anteriores convierten un quad a word extendiendo el signo
+Otra opcion (para los unsigned) es movz
+
+Extensiones (rd:rax)
+	- cltq	# %eax -(sig ext)-> %rax
+	- cqto	# %eax -(sig ext)-> %rdx:%rax
+	- cbw 	# al -> ax
+	- cbde	# ax -> eax
+	- cwd		# ax -> dx:ax
+	- cdq		# eax -> edx:eax
+	
+Volviendo a las llamadas a funciones, la llamada en si es un salto pero antes hay que informar (a la funcion llamada) la direccion del retorno (la dir de la siguiente instruccion a ejecutar)
+Ej:
+	movq $sigue, %rbx
+	jmp func
+sigue:
+
+x86_64 usa el stack para guardar la direccion de retorno, o sea: en lugar del "movq $sigue, %rbx" hace "pushq $sigue"
+
+Retornar de una funcion equivale entonces a:
+	jmp (%rsp) # y pop
+	popq %rbx
+	jmp *%rbx # esto pierde un registro tambien
+	
+Para evitar usar registror, assambler provee una inst que hace el pop y el salto (sin usar registros adicionales) que es "ret"
+	ret = popq
+			jmp
+
+La llamada a una funcion:
+	call func = pushq $prox_inst
+					jmp func
+Una funcion a llamada, entonces, es "call func" y para retornoar "ret"
+
+Ej:
+
+calculo_muy_complicado
+	movl i, %eax
+	imul $2, %eax
+	ret
+main:
+	movl $0, i
+sigue:
+	cmpl $1000, i
+	jge
+	call calculo_muy_complicado
+	incl i
+	jmp sigue
+fin:
+	call calculo_muy_complicado
+	ret

@@ -1,0 +1,5 @@
+¿Como se pasan argumentos y se devuelven valores?
+
+Se usan convenciones de llamadas: todos los programas en C en linux, saben que determinados registros y el stack se usan para pasar argumentos
+Adelanto: los seis primeros argumentos (si son todos tipo entero) van a parar a los registros rdi, rsi, rdx, rcx, r8, r9 y el resto ira al stack (salvo flotantes), de derecha a izquierda
+El valor de retorno se guarda en rax

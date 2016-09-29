@@ -1,0 +1,97 @@
+# http://x86.renejeschke.de/ -> pagina de instrucciones assembler
+
+Punto flotante en x86_64
+
+Tipos de datos float (en C):
+	-float equivale a los flotantes de simple precision de IEEE754 (32 bits)
+	-double equivale a doble precision de IEEE754 (64 bits)
+	-long double (16 bytes) IEEE754 formato extendido de 80 bits 
+	-__float128  (16 bytes) IEEE754 formato extendido de 128 bits , las operaciones son simuladas por software
+	
+-------------------------------------------
+Ejemplo ejercicio:
+3.14
+	Bit de signo: 0
+	En binario: 11.00100011  Parte decimal -> convertir a binario
+									 Parte fraccionaria -> multiplicar x2 e ir guardando la parte entera
+	
+	Normalizado: 1.100100011 x 2¹(^1)
+	Exponente: 1
+	Fraccion: 100100011
+
+Pasaje a float:
+	Sumar 127 al exponente y quedarse con los 23 bits de la fraccion
+	|0|10000000|100100011|
+	Exponente: 128 -> 10000000
+						-> 0x40
+----------------------------------------------
+SSE3: sub-unidad unidad de punto flotante disponible en todos los procesadores de x86_64
+
+Movimiento:
+	movss (%rax), %xmm7
+	# Copiara lo que esta apuntado por rax (32 bits) a xmm7
+	# Tambien permite copiar de reg a reg (flotante ambos)
+
+Convertir:
+	cvts -> convert (conversiones enteras)
+	cvtts	 -> convertir con truncamiento
+
+Convención de llamada:
+  - Los argumentos flotantes (o dobles) van en xmm0 a xmm7 (el primer argumento flotante en xmm0).Si hay más de 8, el resto va en el stack.
+  - Si la función retorna un flotante (o doble) el resultado queda en xmm0.
+  - Todos los registros (xmm0 a xmm7) son caller-saves
+
+
+Ej:
+En C:
+double convert (double t){
+	ret t*(1.8)+32;
+}
+	double => retorna en xmm0
+	double t => 1er arg en xmm0
+
+En Assembler:
+  .global convert
+  convert: # en xmm0 viene t
+  # Carga el valor 1.8 en xmm1
+  # La constante es la representacion
+  # segun IEEE 754 de 1.8
+  movabsq $4610785298501913805, %rax # El 'abs' es necesario por el largo de la constante
+  movq %rax, -8(%rsp) # La red zone me permite hacerlo
+  movsd -8(%rsp), %xmm1
+  # Carga el valor 32.0 convirtiendo
+  # el valor entero 32 de rax a xmm2
+  movq $32, %rax # Cargo el 32 como un entero
+  cvtsi2sdq %rax, %xmm2 # Lo convierto a double
+  # xmm0=xmm0*xmm1 => xmm0=t*1.8
+  mulsd %xmm1, %xmm0
+  # xmmo=xmm0+xmm2 => xmmo=t*1.8+32
+  addsd %xmm2, %xmm0
+  # como el valor de retorno se
+  # escribe en xmm0 hemos terminado
+  ret
+ 
+ Ej2:
+ 
+void sum(float a[4], float b[4]) {
+  int i;
+  for(i=0;i<4;i++)
+  		a[i]=a[i]+b[i];
+}
+
+ .global sum
+sum:
+  # Notar que en este caso los argumentos
+  # son punteros y vienen en rdi y rsi respectivamente
+  # copia los 4 floats de "a" a xmm0
+  movaps (%rdi), %xmm0 # Copia 128 bits a 'a'
+  # copia los 4 floats de "b" a xmm1 
+  movaps (%rsi), %xmm1 # b -> xmm1
+  # suma los 4 floats a la vez
+  addps %xmm0, %xmm1 # xmm1 = a+b
+  # addps suma los 4 valores de precision simple a la vez
+  # guarda el resultado en "a"
+  movaps %xmm1, (%rdi) # 
+  ret
+
+

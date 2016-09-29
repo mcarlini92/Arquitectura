@@ -1,0 +1,19 @@
+Organizacion del stack de mini_printf
+
+args
+r.a.
+rbp anterior
+int i
+int ch
+char *s
+char *p
+gp_offset
+fp_offset
+overflow_arg_area
+reg_save_area
+...
+xmm0
+....
+rsi
+rdi
+...

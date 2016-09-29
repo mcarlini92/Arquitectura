@@ -1,0 +1,17 @@
+Solucion a jmp en diferentes lugares
+
+	.
+	.
+	.
+	movq $sigue, %rbx
+	jmp calculo_muy_complicado
+sigue: incq i
+	.
+	.
+	.
+	movq $sigue2, %rbx
+	jmp calculo_muy_complicado
+	sigue2: ret
+	
+
+

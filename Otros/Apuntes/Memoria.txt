@@ -1,0 +1,27 @@
+Memoria
+
+---------
+funciones
+---------
+malloc
+---------
+c,d,e
+---------
+Hola mundo \0 (en ASCII, caracter juntos con diferencia de un bit)
+---------
+main
+---------
+g
+---------
+f
+---------
+printf
+---------
+
+Distribucion de la memoria:
+
+Segmento de texto: Contiene codigo maquina para las funciones y suele estar en las direcciones mas bajas de memoria. En x86_64, en la configuracion mas usual el segmento de codigo comienza en 0x40000. Todos los procesos (salvo el SO) trabajan con una memoria virtual: disponen de un rango determinado de direcciones a la que pueden acceder como si fuera una gran memoria continua.
+
+Luego del seg de texto vienen segmentos de datos. x86_64 usa datos inicializados y datos sin inicializar. Luego hay memoria dinamica (Ej malloc), a este segmento (que se extiende a medida que pido memoria) se lo llama heap(monticulo)
+
+Al tope del espacio de direcciones esta el segmento de pila. La pila mantiene informacion sobre las llamadas a funcion y usualmente crece hacia direcciones mas bajas (push) *Mirar modelo de memoria en apunte transp_arq_x86_64*

@@ -1,0 +1,22 @@
+Convencion de uso de registros:
+Hay un conjunto de registros que una funcion puede usar sin preocuparse de restaurar su valor. Estos registros no son preservados cuando se llama a una funcion y por lo tanto la funcion llamante debe estar preparada ya que posiblemente su valor cambie cuando realice un llamado a otra funcion
+Si hay un valor util en estos registros, conviene que la funcion llamante lo guarde en otro lado
+Ej:
+	addq %rbx, %rax
+	pushq %rax 			# Guardar rax
+	call printf			# rax = nro de chars
+	popq %rax			# Restaurar rax
+	addq %rcx, %rax
+	
+A ese conjunto de registros (preservados por el llamante) se los llama "caller save"
+El otro conjunto de registros (que debe ser preservado por la funcion llamada) se llama "callee save" (Ej: rsp rbp)
+
+Ej:
+caller save
+	rax, si necesito llamar a una funcion debo guardarlos
+	De argumentos: rdi, rsi, rdx, rcv, r8, r9
+callee save
+	rbx, rbp, rsp, r10, r13, r14, r15
+	
+Esta convencion esta determinada por C en x86_64 en Linux, por lo que dicha convencion puede cambiar en otras arquitecturas y/o lenguajes (Ej: Pascal)
+	

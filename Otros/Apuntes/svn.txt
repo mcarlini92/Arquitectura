@@ -1,0 +1,12 @@
+#svn http://dcc.fceia.unr.edu.ar/svn-no-anon/lcc/R-222/Alumnos/2014
+#svn checkout [URL] //Crea copia LOCAL del repositorio
+#cd 2014 //Entro al directorio
+#svn status //Muestra el estado de la copia local
+#svn info //Muestra informacion sobre repositorio
+#svn log //Muestra historial de cambios
+#svn mkdir [NAME] //Crea carpeta
+#svn add [NAME].c
+#svn commit -m "MSJ" //Sube cambios con mensaje
+#svn update //Actualiza la copia LOCAL
+#svn diff //Muestra los cambios realizados
+#svn diff -v //Compara la version v con la copia LOCAL

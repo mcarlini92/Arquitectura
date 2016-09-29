@@ -1,0 +1,37 @@
+(Complementario a la transparencia Arquitectura x86_64 y Apunte 3)
+
+Registros: se usan para fines especificos, no es obligatorio pero el uso habitual se relacion con determinadas funcionalidades. Hay instrucciones que usan implicitamente un registro en particular.
+
+rax: Acumulador, operaciones aritmeticas y logicas, calculos generales
+rbx: Puntero a la base de una estructura de datos complejas (struct de C, un arreglo, etc..)
+rcx: Contador (hay instrucciones de loops, bluces)
+rdx: Datos, puede usarse como extension de rax
+
+Registros de segmentos: tienen que ver con la administracion de la memoria, en la configuracion habitual casi son todos vacios
+
+rip: Puntero a la proxima instruccion
+rflgas: Banderas y control
+
+Control: determinados bits permiten controlar determinadas funciones del procesador (ej: modos de proteccion, incremento y decremento automatico de punteros)
+Banderas: indican informacion sobre el procesador y en particular, sobre el resultado de la ultima operacion
+
+Subregistros: (mirar transparencia)
+
+Mas registros:
+
+rbp: base pointer, puntero a la base de la pila (usado en llamadas a funcion)
+rsp: stack pointer, puntero al ultimo elemento de la pila (hay instrucciones que usan implicitamente este registro)
+rsi: source index, puntero a un dato fuente
+rdi: destination index, puntero a un dato destino. Hay instrucciones (de cadena) que usan estos registros
+
+Little-endian y big-endian: Intel (desde el 8080) usa arq "little endian": los bytes menos significativos se guardan en las zonas(posiciones) de memoria mas bajas
+Otras arquitecturas funcionan a la inversa, llamda "big endian" y hay incluso algunas que utilizan ordenamientos mas complicados. Otras permiten elegir la convencion utilizada
+
+/*
+x86_64 permite tomar un solo argumento en las operaciones de la memoria (es mas rapido el acceso a registro)
+
+Ciclos de instruccion: fetch (acceso a memoria para leer la instruccion), decode y execute (acceso a memoria para traer o almacenar datos)
+
+*/
+
+
